@@ -9,7 +9,7 @@ public class ThemesInLibrary : MonoBehaviour
 
     private List<GameObject> themes;
 
-    void Start()
+    void Awake()
     {
         themes = new List<GameObject>();
     }

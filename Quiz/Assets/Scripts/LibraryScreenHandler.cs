@@ -9,19 +9,18 @@ public class LibraryScreenHandler : MonoBehaviour
 
     private GameObject eventSystem;
     private Themes allQuestions;
-    
 
 
-    void Start()
+    void Awake()
     {
+        Debug.Log("LibraryScreen awake");
         eventSystem = GameObject.FindWithTag("EventSystem");
         allQuestions = eventSystem.GetComponent<AllQuestions>().allThemes;
-
-        LoadThemes();
     }
 
-    private void LoadThemes()
+    public void LoadThemes()
     {
+        Debug.Log("Loading themes...");
         foreach (Theme theme in allQuestions.themes)
         {
             themesHandler.CreateTheme(this, theme.themeId, theme.themeTitle, theme.questions.Count);

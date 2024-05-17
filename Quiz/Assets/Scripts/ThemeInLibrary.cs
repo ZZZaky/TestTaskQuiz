@@ -13,7 +13,7 @@ public class ThemeInLibrary : MonoBehaviour
     private int quizId;
     private ScreensHandler eventSystem;
 
-    void Start()
+    void Awake()
     {
         eventSystem = GameObject.FindWithTag("EventSystem").GetComponent<ScreensHandler>();
     }

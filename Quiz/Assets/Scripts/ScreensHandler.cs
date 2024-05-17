@@ -25,6 +25,9 @@ public class ScreensHandler : MonoBehaviour
     void Start()
     {
         SetActiveScreen("Library");
+        libraryScreen.GetComponent<LibraryScreenHandler>().LoadThemes();
+
+        SetActiveScreen("Home");
     }
 
     private void ResetScreens()
@@ -62,7 +65,9 @@ public class ScreensHandler : MonoBehaviour
                 quizScreen.SetActive(true);
                 break;
             case "Library":
+                Debug.Log("Opening screen");
                 libraryScreen.SetActive(true);
+                //libraryScreen.GetComponent<LibraryScreenHandler>().LoadThemes();
                 break;
             default:
                 homeIcon.color = activeButtonColor;
