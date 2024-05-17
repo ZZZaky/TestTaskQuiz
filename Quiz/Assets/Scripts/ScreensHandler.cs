@@ -10,6 +10,7 @@ public class ScreensHandler : MonoBehaviour
     public GameObject editScreen;
     public GameObject shopScreen;
     public GameObject quizScreen;
+    public GameObject libraryScreen;
     
     [Header("Bottom panel buttons")]
     public Image homeIcon;
@@ -23,7 +24,7 @@ public class ScreensHandler : MonoBehaviour
 
     void Start()
     {
-        SetActiveScreen("Home");
+        SetActiveScreen("Library");
     }
 
     private void ResetScreens()
@@ -36,6 +37,7 @@ public class ScreensHandler : MonoBehaviour
         editScreen.SetActive(false);
         shopScreen.SetActive(false);
         quizScreen.SetActive(false);
+        libraryScreen.SetActive(false);
     }
 
     public void SetActiveScreen(string screen)
@@ -59,6 +61,9 @@ public class ScreensHandler : MonoBehaviour
             case "Quiz":
                 quizScreen.SetActive(true);
                 break;
+            case "Library":
+                libraryScreen.SetActive(true);
+                break;
             default:
                 homeIcon.color = activeButtonColor;
                 homeScreen.SetActive(true);
@@ -68,6 +73,7 @@ public class ScreensHandler : MonoBehaviour
 
     public void StartQuiz(int quizId)
     {
+        Debug.Log("Starting Quiz...");
         SetActiveScreen("Quiz");
 
         quizScreen.GetComponent<QuizScreenHandler>().StartQuiz(quizId);
