@@ -31,7 +31,7 @@ public class QuizScreenHandler : MonoBehaviour
     {
         this.quizId = quizId;
         EventSystem = GameObject.FindWithTag("EventSystem");
-        currentQuiz = EventSystem.GetComponent<AllQuestions>().allThemes.themes[quizId];
+        currentQuiz = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId];
         currentQuestion = 0;
 
         answers = new List<int>();

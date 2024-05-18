@@ -7,10 +7,22 @@ public class ShopScreenHandler : MonoBehaviour
 {
     [Header("User's coins")]
     public Text coins;
-    private int coinsCurrent = 600;
 
-    void Start()
+    private int coinsCurrent;
+    private GameObject EventSystem;
+
+    void Awake()
     {
+        EventSystem = GameObject.FindWithTag("EventSystem");
+
+        if (EventSystem.GetComponent<SavableInfoHandler>().coins == 0)
+        {
+            coinsCurrent = 600;
+        }
+        else
+        {
+            coinsCurrent = EventSystem.GetComponent<SavableInfoHandler>().coins;
+        }
         UpdateCoins();
     }
 
@@ -24,6 +36,4 @@ public class ShopScreenHandler : MonoBehaviour
         coinsCurrent += amount;
         UpdateCoins();
     }
-
-
 }

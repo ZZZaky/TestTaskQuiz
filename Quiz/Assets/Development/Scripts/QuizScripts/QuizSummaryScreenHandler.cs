@@ -30,7 +30,7 @@ public class QuizSummaryScreenHandler : MonoBehaviour
             this.quizId = quizId;
 
             userAnswers = new List<int>();
-            foreach (var dummy in EventSystem.GetComponent<AllQuestions>().allThemes.themes[this.quizId].questions)
+            foreach (var dummy in EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[this.quizId].questions)
             {
                 userAnswers.Add(0);
             }

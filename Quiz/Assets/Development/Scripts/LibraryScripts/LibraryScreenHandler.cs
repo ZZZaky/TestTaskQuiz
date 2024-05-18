@@ -14,7 +14,7 @@ public class LibraryScreenHandler : MonoBehaviour
     void Awake()
     {
         EventSystem = GameObject.FindWithTag("EventSystem");
-        allQuestions = EventSystem.GetComponent<AllQuestions>().allThemes;
+        allQuestions = EventSystem.GetComponent<SavableInfoHandler>().allThemes;
         LoadThemes();
     }
 

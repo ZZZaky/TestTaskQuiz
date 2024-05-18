@@ -18,7 +18,7 @@ public class DailyQuizHandler : MonoBehaviour
     void Start()
     {
         EventSystem = GameObject.FindWithTag("EventSystem");
-        Themes allquizes = EventSystem.GetComponent<AllQuestions>().allThemes;
+        Themes allquizes = EventSystem.GetComponent<SavableInfoHandler>().allThemes;
 
         System.DateTime theTime = System.DateTime.Now;
         int keyForSelection = theTime.Year + theTime.Month + theTime.Day;

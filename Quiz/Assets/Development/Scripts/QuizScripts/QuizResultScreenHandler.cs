@@ -23,13 +23,13 @@ public class QuizResultScreenHandler : MonoBehaviour
 
     public void CreateResult(int quizId, List<int> answers)
     {
-        Title.text = EventSystem.GetComponent<AllQuestions>().allThemes.themes[quizId].themeTitle;
-        MaxAnswers.text = EventSystem.GetComponent<AllQuestions>().allThemes.themes[quizId].questions.Count.ToString();
+        Title.text = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId].themeTitle;
+        MaxAnswers.text = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId].questions.Count.ToString();
 
         userAnswers = new List<int>(answers);
 
         correctAnswers = new List<int>();
-        foreach (Question question in EventSystem.GetComponent<AllQuestions>().allThemes.themes[quizId].questions)
+        foreach (Question question in EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId].questions)
         { correctAnswers.Add(question.correctAnswer); }
 
         Result = new List<bool>();
