@@ -14,7 +14,7 @@ public class ThemesInLibrary : MonoBehaviour
         themes = new List<GameObject>();
     }
 
-    public void CreateTheme(LibraryScreenHandler onClickDo, int quizId, string title, int questionCount)
+    public void CreateTheme(int quizId, string title, int questionCount)
     {
         themes.Add(ThemePrefab);
 

@@ -7,14 +7,15 @@ using UnityEngine.UI;
 
 public class QuizScreenHandler : MonoBehaviour
 {
-    private Theme currentQuiz;
-    private int currentQuestion = 0;
-
     public Text Title;
     public Text QuestionTxt;
     public AnswerHandler Answers;
     public ProgressBarHandler ProgressBar;
     public Text currentQuestionText;
+    
+    private GameObject EventSystem;
+    private Theme currentQuiz;
+    private int currentQuestion = 0;
 
     private List<int> answers;
 
@@ -26,7 +27,8 @@ public class QuizScreenHandler : MonoBehaviour
 
     public void StartQuiz(int quizId)
     {
-        currentQuiz = GameObject.FindWithTag("EventSystem").GetComponent<AllQuestions>().allThemes.themes[quizId];
+        EventSystem = GameObject.FindWithTag("EventSystem");
+        currentQuiz = EventSystem.GetComponent<AllQuestions>().allThemes.themes[quizId];
         currentQuestion = 0;
 
         answers = new List<int>();
@@ -50,6 +52,11 @@ public class QuizScreenHandler : MonoBehaviour
             SetCurrentQuestion();
             QuestionTxt.text = currentQuiz.questions[currentQuestion].question;
             Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
+        }
+        else if(currentQuestion == currentQuiz.questions.Count - 1)
+        {
+            EventSystem.GetComponent<ScreensHandler>().SetActiveScreen("QuizSummary");
+            currentQuestion++;
         }
     }
 

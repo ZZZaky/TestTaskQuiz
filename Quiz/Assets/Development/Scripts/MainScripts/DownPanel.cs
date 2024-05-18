@@ -20,17 +20,9 @@ public class DownPanel : MonoBehaviour
     public GameObject shopScreen;
 
 
-    private enum Screen
-    {
-        Home,
-        Edit,
-        Shop
-    }
-
-
     void Start()
     {
-        SetActiveScreen(Screen.Home);
+        SetActiveScreen("Home");
     }
 
     private void ResetScreen()
@@ -44,21 +36,21 @@ public class DownPanel : MonoBehaviour
         shopScreen.SetActive(false);
     }
 
-    private void SetActiveScreen(Screen screen)
+    private void SetActiveScreen(string screen)
     {
         ResetScreen();
 
         switch (screen)
         {
-            case Screen.Home:
+            case "Home":
                 homeIcon.GetComponent<Image>().color = activeButtonColor;
                 homeScreen.SetActive(true);
                 break;
-            case Screen.Edit:
+            case "Edit":
                 editIcon.GetComponent<Image>().color = activeButtonColor;
                 editScreen.SetActive(true);
                 break;
-            case Screen.Shop:
+            case "Shop":
                 shopIcon.GetComponent<Image>().color = activeButtonColor;
                 shopScreen.SetActive(true);
                 break;
@@ -73,17 +65,17 @@ public class DownPanel : MonoBehaviour
 #region functions for 3 main buttons
     public void SetActiveHome()
     {
-        SetActiveScreen(Screen.Home);
+        SetActiveScreen("Home");
     }
 
     public void SetActiveEdit()
     {
-        SetActiveScreen(Screen.Edit);
+        SetActiveScreen("Edit");
     }
 
     public void SetActiveShop()
     {
-        SetActiveScreen(Screen.Shop);
+        SetActiveScreen("Shop");
     }
 #endregion
 }
