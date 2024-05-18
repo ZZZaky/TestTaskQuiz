@@ -17,6 +17,8 @@ public class QuizScreenHandler : MonoBehaviour
     private Theme currentQuiz;
     private int currentQuestion = 0;
 
+    private int quizId;
+
     private List<int> answers;
 
     public void Update()
@@ -27,35 +29,58 @@ public class QuizScreenHandler : MonoBehaviour
 
     public void StartQuiz(int quizId)
     {
+        this.quizId = quizId;
         EventSystem = GameObject.FindWithTag("EventSystem");
         currentQuiz = EventSystem.GetComponent<AllQuestions>().allThemes.themes[quizId];
         currentQuestion = 0;
 
         answers = new List<int>();
         for (int i = 0; i < currentQuiz.questions.Count; i++) { answers.Add(0); }
-        SetCurrentQuestion();
+        UpdateCurrentQuestion();
 
         Title.text = currentQuiz.themeTitle;
         QuestionTxt.text = currentQuiz.questions[currentQuestion].question;
         Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
         UpdateProgressBar();
     }
-    
+
+    public void UpdateCurrentQuestion()
+    {
+        currentQuestionText.text = $"{currentQuestion + 1} / {answers.Count}";
+    }
+
+    public void ResetCurrentQuestion()
+    {
+        currentQuestion = 0;
+        Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
+
+        UpdateCurrentQuestion();
+    }
+
+    public void UpdateProgressBar()
+    {
+        ProgressBar.SetValue(answers.Count((x) => x > 0));
+        ProgressBar.SetMaxValue(currentQuiz.questions.Count);
+    }
+
+#region Buttons
     public void NextQuestion()
     {
-        if(currentQuestion != currentQuiz.questions.Count - 1) 
+        if (currentQuestion != currentQuiz.questions.Count - 1)
         {
             answers[currentQuestion] = Answers.GetUserAnswer();
             UpdateProgressBar();
 
             currentQuestion++;
-            SetCurrentQuestion();
+            UpdateCurrentQuestion();
             QuestionTxt.text = currentQuiz.questions[currentQuestion].question;
             Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
         }
-        else if(currentQuestion == currentQuiz.questions.Count - 1)
+        else if (currentQuestion == currentQuiz.questions.Count - 1)
         {
             EventSystem.GetComponent<ScreensHandler>().SetActiveScreen("QuizSummary");
+            EventSystem.GetComponent<ScreensHandler>().quizSummaryScreen.GetComponent<QuizSummaryScreenHandler>().CreateSummary(Title.text, quizId);
+            EventSystem.GetComponent<ScreensHandler>().quizSummaryScreen.GetComponent<QuizSummaryScreenHandler>().UpdateSummary(answers);
             currentQuestion++;
         }
     }
@@ -68,20 +93,10 @@ public class QuizScreenHandler : MonoBehaviour
             UpdateProgressBar();
 
             currentQuestion--;
-            SetCurrentQuestion();
+            UpdateCurrentQuestion();
             QuestionTxt.text = currentQuiz.questions[currentQuestion].question;
             Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
         }
     }
-
-    public void SetCurrentQuestion()
-    {
-        currentQuestionText.text = $"{currentQuestion + 1} / {answers.Count}";
-    }
-
-    public void UpdateProgressBar()
-    {
-        ProgressBar.SetValue(answers.Count((x) => x > 0));
-        ProgressBar.SetMaxValue(currentQuiz.questions.Count);
-    }
+#endregion
 }

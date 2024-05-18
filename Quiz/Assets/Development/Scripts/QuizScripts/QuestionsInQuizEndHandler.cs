@@ -9,7 +9,7 @@ public class QuestionsInQuizEndHandler : MonoBehaviour
     private List<GameObject> questions;
     private GameObject EventSystem;
 
-    void Start()
+    void Awake()
     {
         EventSystem = GameObject.FindWithTag("EventSystem");
         questions = new List<GameObject>();

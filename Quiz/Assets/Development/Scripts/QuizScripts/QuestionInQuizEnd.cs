@@ -11,13 +11,13 @@ public class QuestionInQuizEnd : MonoBehaviour
     public Color WrongAnswer;
     public Color NeutralAnswer;
 
-    private int questionId;
+    public int questionId;
     private int answer;
 
     public void Initialization(int id, int answer)
     {
         questionId = id;
-        questionIdText.text = questionId.ToString();
+        questionIdText.text = questionId.ToString() + ".";
 
         UpdateAnswerAnswer(answer);
         UpdateAnswerColor("");

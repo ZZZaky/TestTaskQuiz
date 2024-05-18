@@ -27,9 +27,6 @@ public class ScreensHandler : MonoBehaviour
 
     void Start()
     {
-        //SetActiveScreen("Library");
-        //libraryScreen.GetComponent<LibraryScreenHandler>().LoadThemes();
-
         SetActiveScreen("Home");
     }
 
