@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,6 @@ public class SavableInfoHandler : MonoBehaviour
     void Awake()
     {
         Debug.Log($"Savable files located in: [{Application.persistentDataPath}]");
-        SaveToJson();
     }
 
     public void SaveToJson()

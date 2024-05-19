@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,8 +23,9 @@ public class ScreensHandler : MonoBehaviour
     public Color inactiveButtonColor;
 
 
-    void Start()
+    void Awake()
     {
+        SetActiveScreen("Shop"); // Не фиксирует изменения монет пока не открою экран магазина (???)
         SetActiveScreen("Home");
     }
 
@@ -84,9 +83,7 @@ public class ScreensHandler : MonoBehaviour
 
     public void StartQuiz(int quizId)
     {
-        Debug.Log("Starting Quiz...");
         SetActiveScreen("Quiz");
-
         quizScreen.GetComponent<QuizScreenHandler>().StartQuiz(quizId);
     }
 }

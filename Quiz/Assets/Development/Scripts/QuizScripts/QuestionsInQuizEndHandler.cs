@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,16 +6,19 @@ public class QuestionsInQuizEndHandler : MonoBehaviour
     public GameObject QuestionPrefab;
 
     private List<GameObject> questions;
-    private GameObject EventSystem;
 
     void Awake()
     {
-        EventSystem = GameObject.FindWithTag("EventSystem");
         questions = new List<GameObject>();
     }
 
     public void Clear()
     {
+        foreach (GameObject item in questions)
+        {
+            Destroy(item);
+        }
+
         questions = new List<GameObject>();
     }
 

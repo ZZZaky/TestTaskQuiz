@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,13 +9,13 @@ public class QuestionInQuizEnd : MonoBehaviour
     public Color WrongAnswer;
     public Color NeutralAnswer;
 
-    public int questionId;
+    private int questionId;
     private int answer;
 
     public void Initialization(int id, int answer)
     {
         questionId = id;
-        questionIdText.text = questionId.ToString() + ".";
+        questionIdText.text = (questionId + 1).ToString() + ".";
 
         UpdateAnswerAnswer(answer);
         UpdateAnswerColor("");

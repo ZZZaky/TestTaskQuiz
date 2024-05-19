@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,20 +6,25 @@ public class ShopScreenHandler : MonoBehaviour
     [Header("User's coins")]
     public Text coins;
 
+    [Header("Bonuses")]
+    public int CoinsForCorrectAnswer;
+    public int PenaltyForUsingHint;
+
     private int coinsCurrent;
     private GameObject EventSystem;
 
     void Awake()
     {
         EventSystem = GameObject.FindWithTag("EventSystem");
+        SavableInfoHandler savedData = EventSystem.GetComponent<SavableInfoHandler>();
 
-        if (EventSystem.GetComponent<SavableInfoHandler>().coins == 0)
+        if (savedData.coins == 0)
         {
             coinsCurrent = 600;
         }
         else
         {
-            coinsCurrent = EventSystem.GetComponent<SavableInfoHandler>().coins;
+            coinsCurrent = savedData.coins;
         }
         UpdateCoins();
     }
@@ -31,9 +34,15 @@ public class ShopScreenHandler : MonoBehaviour
         coins.text = coinsCurrent.ToString();
     }
 
-    public void ChangeCoins(int amount)
+    public void AddCoinsForCorrectAnswer(int amount)
     {
         coinsCurrent += amount;
+        UpdateCoins();
+    }
+
+    public void RemoveCoinsForUsingHints(int amount) 
+    {
+        coinsCurrent -= amount;
         UpdateCoins();
     }
 }

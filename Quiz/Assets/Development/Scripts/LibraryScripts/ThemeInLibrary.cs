@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ThemeInLibrary : MonoBehaviour
@@ -11,11 +8,11 @@ public class ThemeInLibrary : MonoBehaviour
     public Button button;
 
     private int quizId;
-    private ScreensHandler eventSystem;
+    private ScreensHandler EventSystem;
 
     void Awake()
     {
-        eventSystem = GameObject.FindWithTag("EventSystem").GetComponent<ScreensHandler>();
+        EventSystem = GameObject.FindWithTag("EventSystem").GetComponent<ScreensHandler>();
     }
 
     public void Initialization(string title, int counter, int quizId)
@@ -28,6 +25,6 @@ public class ThemeInLibrary : MonoBehaviour
 
     public void StartQuiz()
     {
-        eventSystem.StartQuiz(quizId);
+        EventSystem.StartQuiz(quizId);
     }
 }

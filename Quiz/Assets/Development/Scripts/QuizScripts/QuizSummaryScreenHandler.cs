@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class QuizSummaryScreenHandler : MonoBehaviour
@@ -14,6 +12,7 @@ public class QuizSummaryScreenHandler : MonoBehaviour
     private int quizId;
     private List<int> userAnswers;
     private bool Created;
+    private int hintsUsed;
 
     void Awake()
     {
@@ -22,12 +21,13 @@ public class QuizSummaryScreenHandler : MonoBehaviour
         Created = false;
     }
 
-    public void CreateSummary(string title, int quizId)
+    public void CreateSummary(string title, int quizId, int hintsUsed)
     {
         if (!Created) 
         {
             Title.text = title;
             this.quizId = quizId;
+            this.hintsUsed = hintsUsed;
 
             userAnswers = new List<int>();
             foreach (var dummy in EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[this.quizId].questions)
@@ -44,13 +44,10 @@ public class QuizSummaryScreenHandler : MonoBehaviour
         }
     }
 
-    public void DeleteSummary()
+    public void UpdateSummary(List<int> answers, int hintsUsed)
     {
-        Created = false;
-    }
+        this.hintsUsed = hintsUsed;
 
-    public void UpdateSummary(List<int> answers)
-    {
         for(int i = 0; i < answers.Count; i++) 
         {
             QuestionsHandler.ChangeQuestionAnswer(i, answers[i]);
@@ -76,14 +73,17 @@ public class QuizSummaryScreenHandler : MonoBehaviour
 #region Buttons
     public void BackToQuiz()
     {
+
         EventSystem.GetComponent<ScreensHandler>().SetActiveScreen("Quiz");
         EventSystem.GetComponent<ScreensHandler>().quizScreen.GetComponent<QuizScreenHandler>().ResetCurrentQuestion();
     }
 
     public void QuizDone()
     {
+        Created = false;
+        QuestionsHandler.Clear();
         EventSystem.GetComponent<ScreensHandler>().SetActiveScreen("QuizResult");
-        EventSystem.GetComponent<ScreensHandler>().quizResultScreen.GetComponent<QuizResultScreenHandler>().CreateResult(quizId, userAnswers);
+        EventSystem.GetComponent<ScreensHandler>().quizResultScreen.GetComponent<QuizResultScreenHandler>().CreateResult(quizId, userAnswers, hintsUsed);
     }
 #endregion
 }

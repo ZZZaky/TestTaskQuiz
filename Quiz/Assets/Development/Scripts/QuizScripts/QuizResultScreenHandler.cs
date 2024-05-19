@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,30 +20,32 @@ public class QuizResultScreenHandler : MonoBehaviour
         EventSystem = GameObject.FindWithTag("EventSystem");
     }
 
-    public void CreateResult(int quizId, List<int> answers)
+    public void CreateResult(int quizId, List<int> answers, int hintsUsed)
     {
-        Title.text = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId].themeTitle;
-        MaxAnswers.text = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId].questions.Count.ToString();
+        QuestionsHandler.Clear();
+        Theme currentTheme = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId];
+        Title.text = currentTheme.themeTitle;
+        MaxAnswers.text = currentTheme.questions.Count.ToString();
 
         userAnswers = new List<int>(answers);
 
         correctAnswers = new List<int>();
-        foreach (Question question in EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId].questions)
+        foreach (Question question in currentTheme.questions)
         { correctAnswers.Add(question.correctAnswer); }
 
         Result = new List<bool>();
         for (int i = 0; i < correctAnswers.Count; i++)
         { Result.Add(userAnswers[i] == correctAnswers[i]); }
 
-        GenerateResult();
+        AddBonuses(GenerateResult(), hintsUsed);
     }
 
-    private void GenerateResult()
+    private int GenerateResult()
     {
         int correctAnswersCounter = 0;
         for (int i = 0; i < correctAnswers.Count; i++)
         {
-            QuestionsHandler.CreateQuestion(i, correctAnswers[i]);
+            QuestionsHandler.CreateQuestion(i, userAnswers[i]);
 
             if (userAnswers[i] == correctAnswers[i])
             {
@@ -58,5 +59,17 @@ public class QuizResultScreenHandler : MonoBehaviour
         }
 
         CorrectAnswers.text = correctAnswersCounter.ToString();
+        return correctAnswersCounter;
+    }
+
+    private void AddBonuses(int correctAnswersCounter, int hintsCounter)
+    {
+        ShopScreenHandler shopScreen = EventSystem.GetComponent<ScreensHandler>().shopScreen.GetComponent<ShopScreenHandler>();
+
+        int plusCoins = correctAnswersCounter * shopScreen.CoinsForCorrectAnswer;
+        int minusCoins = hintsCounter * shopScreen.PenaltyForUsingHint;
+
+        shopScreen.AddCoinsForCorrectAnswer(plusCoins);
+        shopScreen.RemoveCoinsForUsingHints(minusCoins);
     }
 }

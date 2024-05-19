@@ -12,12 +12,13 @@ public class QuizScreenHandler : MonoBehaviour
     public AnswerHandler Answers;
     public ProgressBarHandler ProgressBar;
     public Text currentQuestionText;
-    
+
     private GameObject EventSystem;
     private Theme currentQuiz;
     private int currentQuestion = 0;
-
     private int quizId;
+
+    private int hintsUsed;
 
     private List<int> answers;
 
@@ -33,6 +34,7 @@ public class QuizScreenHandler : MonoBehaviour
         EventSystem = GameObject.FindWithTag("EventSystem");
         currentQuiz = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId];
         currentQuestion = 0;
+        hintsUsed = 0;
 
         answers = new List<int>();
         for (int i = 0; i < currentQuiz.questions.Count; i++) { answers.Add(0); }
@@ -63,7 +65,7 @@ public class QuizScreenHandler : MonoBehaviour
         ProgressBar.SetMaxValue(currentQuiz.questions.Count);
     }
 
-#region Buttons
+    #region Buttons
     public void NextQuestion()
     {
         if (currentQuestion != currentQuiz.questions.Count - 1)
@@ -79,8 +81,9 @@ public class QuizScreenHandler : MonoBehaviour
         else if (currentQuestion == currentQuiz.questions.Count - 1)
         {
             EventSystem.GetComponent<ScreensHandler>().SetActiveScreen("QuizSummary");
-            EventSystem.GetComponent<ScreensHandler>().quizSummaryScreen.GetComponent<QuizSummaryScreenHandler>().CreateSummary(Title.text, quizId);
-            EventSystem.GetComponent<ScreensHandler>().quizSummaryScreen.GetComponent<QuizSummaryScreenHandler>().UpdateSummary(answers);
+            QuizSummaryScreenHandler quizSummary = EventSystem.GetComponent<ScreensHandler>().quizSummaryScreen.GetComponent<QuizSummaryScreenHandler>();
+            quizSummary.CreateSummary(Title.text, quizId, hintsUsed);
+            quizSummary.UpdateSummary(answers, hintsUsed);
             currentQuestion++;
         }
     }
@@ -98,5 +101,5 @@ public class QuizScreenHandler : MonoBehaviour
             Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
         }
     }
-#endregion
+    #endregion
 }
