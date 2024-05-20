@@ -4,12 +4,20 @@ using UnityEngine.UI;
 public class ScreensHandler : MonoBehaviour
 {
     [Header("Screens")]
+    [Header("Home")]
     public GameObject homeScreen;
+    [Header("Edit")]
+    public GameObject editScreens;
     public GameObject editScreen;
+    public GameObject editThemeScreen;
+    [Header("Shop")]
     public GameObject shopScreen;
+    [Header("Quiz")]
+    public GameObject quizScreens;
     public GameObject quizScreen;
     public GameObject quizSummaryScreen;
     public GameObject quizResultScreen;
+    [Header("Library")]
     public GameObject libraryScreen;
 
     
@@ -25,7 +33,10 @@ public class ScreensHandler : MonoBehaviour
 
     void Awake()
     {
+        editScreens.SetActive(true);
+        quizScreens.SetActive(true);
         SetActiveScreen("Shop"); // Не фиксирует изменения монет пока не открою экран магазина (???)
+        SetActiveScreen("EditTheme");
         SetActiveScreen("Home");
     }
 
@@ -37,6 +48,7 @@ public class ScreensHandler : MonoBehaviour
 
         homeScreen.SetActive(false);
         editScreen.SetActive(false);
+        editThemeScreen.SetActive(false);
         shopScreen.SetActive(false);
         quizScreen.SetActive(false);
         quizSummaryScreen.SetActive(false);
@@ -57,6 +69,9 @@ public class ScreensHandler : MonoBehaviour
             case "Edit":
                 editIcon.color = activeButtonColor;
                 editScreen.SetActive(true);
+                break;
+            case "EditTheme":
+                editThemeScreen.SetActive(true);
                 break;
             case "Shop":
                 shopIcon.color = activeButtonColor;
@@ -85,5 +100,11 @@ public class ScreensHandler : MonoBehaviour
     {
         SetActiveScreen("Quiz");
         quizScreen.GetComponent<QuizScreenHandler>().StartQuiz(quizId);
+    }
+
+    public void EditQuiz(int quizId)
+    {
+        SetActiveScreen("EditTheme");
+        editThemeScreen.GetComponent<EditThemeScreen>().StartEditing(quizId);
     }
 }

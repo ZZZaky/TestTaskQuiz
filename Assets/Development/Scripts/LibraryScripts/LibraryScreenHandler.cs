@@ -17,7 +17,6 @@ public class LibraryScreenHandler : MonoBehaviour
 
     public void LoadThemes()
     {
-        Debug.Log("Loading themes...");
         foreach (Theme theme in allQuestions.themes)
         {
             themesHandler.CreateTheme(theme.themeId, theme.themeTitle, theme.questions.Count);

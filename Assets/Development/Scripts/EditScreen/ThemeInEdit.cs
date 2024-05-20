@@ -1,10 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ThemeInLibrary : MonoBehaviour
+public class ThemeInEdit : MonoBehaviour
 {
     public Text TitleText;
-    public Text QuestionCounterText;
+    public Text IdText;
 
     private int quizId;
     private ScreensHandler EventSystem;
@@ -14,16 +16,15 @@ public class ThemeInLibrary : MonoBehaviour
         EventSystem = GameObject.FindWithTag("EventSystem").GetComponent<ScreensHandler>();
     }
 
-    public void Initialization(string title, int counter, int quizId)
+    public void Initialization(string title, int quizId)
     {
         TitleText.text = title;
-        QuestionCounterText.text = counter.ToString();
-
+        IdText.text = quizId.ToString();
         this.quizId = quizId;
     }
 
-    public void StartQuiz()
+    public void StartEditing()
     {
-        EventSystem.StartQuiz(quizId);
+        EventSystem.EditQuiz(quizId);
     }
 }

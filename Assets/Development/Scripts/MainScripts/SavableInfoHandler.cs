@@ -74,6 +74,17 @@ public class Theme
     public int themeId;
     public List<Question> questions;
 
+    public Theme() {}
+    public Theme(Theme Copy)
+    {
+        this.themeTitle = Copy.themeTitle;
+        this.themeId = Copy.themeId;
+        this.questions = new List<Question>();
+        foreach (Question questions in Copy.questions) 
+        {
+            this.questions.Add(new Question(questions));
+        }
+    }
 
     public override string ToString() => $"id: {themeId}; Title: {themeTitle}; Questions amount: {questions.Count}";
 }
@@ -84,6 +95,25 @@ public class Question
     public string question;
     public List<string> answers;
     public int correctAnswer;
+
+    public Question() {}
+    public Question(Question Copy)
+    {
+        this.question = Copy.question;
+        this.correctAnswer = Copy.correctAnswer;
+
+        this.answers = new List<string>();
+        for (int i = 0; i < 4; i++)
+        {
+            answers.Add(Copy.answers[i]);
+        }
+    }
+    public Question(string question, List<string> answers, int correctAnswer)
+    {
+        this.question = question;
+        this.answers = answers;
+        this.correctAnswer = correctAnswer;
+    }
 
     public string toString() => $"Question: {question}; Correct answer: {correctAnswer}";
 }

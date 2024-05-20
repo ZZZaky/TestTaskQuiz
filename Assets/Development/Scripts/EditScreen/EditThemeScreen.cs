@@ -1,49 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class QuizScreenHandler : MonoBehaviour
+public class EditThemeScreen : MonoBehaviour
 {
     public Text Title;
     public Text QuestionTxt;
     public AnswerHandler Answers;
-    public ProgressBarHandler ProgressBar;
     public Text currentQuestionText;
 
     private GameObject EventSystem;
     private Theme currentQuiz;
+
     private int currentQuestion;
-    private int quizId;
-
-    private int hintsUsed;
-
     private List<int> answers;
 
     public void Update()
     {
         answers[currentQuestion] = Answers.GetUserAnswer();
-        UpdateProgressBar();
     }
 
-    public void StartQuiz(int quizId)
+    public void StartEditing(int quizId)
     {
-        this.quizId = quizId;
         EventSystem = GameObject.FindWithTag("EventSystem");
-        currentQuiz = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId];
-        currentQuestion = 0;
-        hintsUsed = 0;
+        currentQuiz = new Theme(EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId]);
 
+        currentQuestion = 0;
         answers = new List<int>();
-        for (int i = 0; i < currentQuiz.questions.Count; i++) { answers.Add(0); }
-        UpdateCurrentQuestionText();
+        for (int i = 0; i < currentQuiz.questions.Count; i++) 
+        {
+            answers.Add(currentQuiz.questions[i].correctAnswer);
+        }
 
         Title.text = currentQuiz.themeTitle;
         QuestionTxt.text = currentQuiz.questions[currentQuestion].question;
         Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
-        UpdateProgressBar();
+        UpdateCurrentQuestionText();
     }
 
     public void UpdateCurrentQuestionText()
@@ -51,38 +46,16 @@ public class QuizScreenHandler : MonoBehaviour
         currentQuestionText.text = $"{currentQuestion + 1} / {answers.Count}";
     }
 
-    public void ResetCurrentQuestion()
-    {
-        currentQuestion = 0;
-        Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
 
-        UpdateCurrentQuestionText();
-    }
-
-    public void UpdateProgressBar()
-    {
-        ProgressBar.SetValue(answers.Count((x) => x > 0));
-        ProgressBar.SetMaxValue(currentQuiz.questions.Count);
-    }
-
-    #region Buttons
+#region Buttons
     public void NextQuestion()
     {
         if (currentQuestion != currentQuiz.questions.Count - 1)
         {
             answers[currentQuestion] = Answers.GetUserAnswer();
-            UpdateProgressBar();
 
             currentQuestion++;
             UpdateQuestion();
-        }
-        else if (currentQuestion == currentQuiz.questions.Count - 1)
-        {
-            EventSystem.GetComponent<ScreensHandler>().SetActiveScreen("QuizSummary");
-            QuizSummaryScreenHandler quizSummary = EventSystem.GetComponent<ScreensHandler>().quizSummaryScreen.GetComponent<QuizSummaryScreenHandler>();
-            quizSummary.CreateSummary(Title.text, quizId, hintsUsed);
-            quizSummary.UpdateSummary(answers, hintsUsed);
-            currentQuestion++;
         }
     }
 
@@ -91,11 +64,46 @@ public class QuizScreenHandler : MonoBehaviour
         if (currentQuestion != 0)
         {
             answers[currentQuestion] = Answers.GetUserAnswer();
-            UpdateProgressBar();
 
             currentQuestion--;
             UpdateQuestion();
         }
+    }
+
+    public void DeleteQuestion()
+    {
+        currentQuiz.questions.RemoveAt(currentQuestion);
+        answers.RemoveAt(currentQuestion);
+
+        currentQuestion = currentQuestion > 0 ? currentQuestion - 1 : 0;
+        UpdateQuestion();
+    }
+
+    public void AddQuestion()
+    {
+        string newQuestion = "Enter question";
+        List<string> newAnswers = new List<string>();
+        for (int i = 0; i < 4; i++)
+        {
+            newAnswers.Add("Enter answer");
+        }
+        int newCorrectAnswer = 1;
+
+        
+        currentQuestion = currentQuiz.questions.Count;
+        currentQuiz.questions.Add(new Question(newQuestion, newAnswers, newCorrectAnswer));
+        answers.Add(newCorrectAnswer);
+        UpdateQuestion();
+    }
+
+    public void Done()
+    {
+        for (int i = 0; i < answers.Count; i++)
+        {
+            currentQuiz.questions[i].correctAnswer = answers[i];
+        }
+
+        EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[currentQuiz.themeId] = currentQuiz;
     }
 
     private void UpdateQuestion()
