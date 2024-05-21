@@ -1,20 +1,37 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class SavableInfoHandler : MonoBehaviour
 {
-    public Themes allThemes;
     public int coins;
+    public int hints;
+    public int lastEnter;
+    public Themes allThemes;
 
     void Awake()
     {
         Debug.Log($"Savable files located in: [{Application.persistentDataPath}]");
+        LoadFromJson();
+        CheckHints();
+    }
+
+    public void CheckHints()
+    {
+        Debug.Log($"day rn [{DateTime.Now.Day}], last day [{lastEnter}]");
+
+        if (lastEnter != DateTime.Now.Day)
+        {
+            lastEnter = DateTime.Now.Day;
+
+            hints += 4;
+        }
     }
 
     public void SaveToJson()
     {
-        SavableData toSave = new SavableData(allThemes, coins);
+        SavableData toSave = new SavableData(allThemes, coins, hints, lastEnter);
 
         string data = JsonUtility.ToJson(toSave, true);
         string filePath = Application.persistentDataPath + "/SaveQuiz.json";
@@ -32,6 +49,8 @@ public class SavableInfoHandler : MonoBehaviour
             
             allThemes = toLoad.themes;
             coins = toLoad.coins;
+            hints = toLoad.hints;
+            lastEnter = toLoad.lastEnter;
         }
     }
 }
@@ -42,13 +61,17 @@ public class SavableInfoHandler : MonoBehaviour
 public class SavableData
 {
     public int coins;
+    public int hints;
+    public int lastEnter;
     public Themes themes;
 
     public SavableData() {}
-    public SavableData(Themes themes, int coins)
+    public SavableData(Themes themes, int coins, int hints, int lastEnter)
     {
         this.themes = themes;
         this.coins = coins;
+        this.hints = hints;
+        this.lastEnter = lastEnter;
     }
 }
 
