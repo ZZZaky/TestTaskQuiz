@@ -8,7 +8,7 @@ public class ThemeInEdit : MonoBehaviour
     public Text TitleText;
     public Text IdText;
 
-    private int quizId;
+    public int quizId;
     private ScreensHandler EventSystem;
 
     void Awake()

@@ -6,7 +6,7 @@ public class ThemesInEdit : MonoBehaviour
 {
     public GameObject ThemePrefab;
 
-    private List<GameObject> themes = new List<GameObject>();
+    public List<GameObject> themes = new List<GameObject>();
 
     void Awake()
     {

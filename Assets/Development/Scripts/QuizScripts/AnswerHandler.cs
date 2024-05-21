@@ -1,5 +1,6 @@
 using MaterialUI;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,5 +67,17 @@ public class AnswerHandler : MonoBehaviour
     public int GetUserAnswer()
     {
         return clicked;
+    }
+
+    public List<string> GetAnswersText()
+    {
+        List<string> answersText = new List<string>();
+
+        answersText.Add(answer1.text);
+        answersText.Add(answer2.text);
+        answersText.Add(answer3.text);
+        answersText.Add(answer4.text);
+
+        return answersText;
     }
 }

@@ -20,6 +20,10 @@ public class EditThemeScreen : MonoBehaviour
 
     public void Update()
     {
+        currentQuiz.themeTitle = Title.text;
+        currentQuiz.questions[currentQuestion].question = currentQuestionText.text;
+        currentQuiz.questions[currentQuestion].answers = new List<string>(Answers.GetAnswersText());
+
         answers[currentQuestion] = Answers.GetUserAnswer();
     }
 

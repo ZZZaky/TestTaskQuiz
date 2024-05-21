@@ -85,6 +85,12 @@ public class Theme
             this.questions.Add(new Question(questions));
         }
     }
+    public Theme(string themeTitle, int themeId, List<Question> questions)
+    {
+        this.themeTitle = themeTitle;
+        this.themeId = themeId;
+        this.questions = questions;
+    }
 
     public override string ToString() => $"id: {themeId}; Title: {themeTitle}; Questions amount: {questions.Count}";
 }
