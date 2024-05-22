@@ -107,4 +107,16 @@ public class ScreensHandler : MonoBehaviour
         SetActiveScreen("EditTheme");
         editThemeScreen.GetComponent<EditThemeScreen>().StartEditing(quizId);
     }
+
+    public void AddCoinsForCorrectAnswer(int amount)
+    {
+        this.gameObject.GetComponent<SavableInfoHandler>().coins += amount;
+        shopScreen.GetComponent<ShopScreenHandler>().UpdateCoins();
+    }
+
+    public void RemoveCoinsForUsingHints(int amount)
+    {
+        this.gameObject.GetComponent<SavableInfoHandler>().coins -= amount;
+        shopScreen.GetComponent<ShopScreenHandler>().UpdateCoins();
+    }
 }

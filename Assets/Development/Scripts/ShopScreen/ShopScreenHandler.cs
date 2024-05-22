@@ -4,45 +4,35 @@ using UnityEngine.UI;
 public class ShopScreenHandler : MonoBehaviour
 {
     [Header("User's coins")]
-    public Text coins;
+    public Text CoinsText;
 
-    [Header("Bonuses")]
-    public int CoinsForCorrectAnswer;
-    public int PenaltyForUsingHint;
+    [Header("Prices")]
+    public Text HintPriceText;
+    public int HintPrice;
 
-    private int coinsCurrent;
     private GameObject EventSystem;
 
     void Awake()
     {
         EventSystem = GameObject.FindWithTag("EventSystem");
-        SavableInfoHandler savedData = EventSystem.GetComponent<SavableInfoHandler>();
+        HintPriceText.text = HintPrice.ToString();
+        UpdateCoins();
+    }
 
-        if (savedData.coins == 0)
+    public void UpdateCoins()
+    {
+        CoinsText.text = EventSystem.GetComponent<SavableInfoHandler>().coins.ToString();
+    }
+
+    public void BuyHint()
+    {
+        SavableInfoHandler info = EventSystem.GetComponent<SavableInfoHandler>();
+        if (info.coins >= HintPrice)
         {
-            coinsCurrent = 600;
+
+            info.coins -= HintPrice;
+            info.hints += 1;
+            UpdateCoins();
         }
-        else
-        {
-            coinsCurrent = savedData.coins;
-        }
-        UpdateCoins();
-    }
-
-    private void UpdateCoins()
-    {
-        coins.text = coinsCurrent.ToString();
-    }
-
-    public void AddCoinsForCorrectAnswer(int amount)
-    {
-        coinsCurrent += amount;
-        UpdateCoins();
-    }
-
-    public void RemoveCoinsForUsingHints(int amount) 
-    {
-        coinsCurrent -= amount;
-        UpdateCoins();
     }
 }

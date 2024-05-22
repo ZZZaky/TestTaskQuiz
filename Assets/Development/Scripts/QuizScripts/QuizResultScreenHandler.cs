@@ -64,12 +64,12 @@ public class QuizResultScreenHandler : MonoBehaviour
 
     private void AddBonuses(int correctAnswersCounter, int hintsCounter)
     {
-        ShopScreenHandler shopScreen = EventSystem.GetComponent<ScreensHandler>().shopScreen.GetComponent<ShopScreenHandler>();
+        ScreensHandler screens = EventSystem.GetComponent<ScreensHandler>();
 
-        int plusCoins = correctAnswersCounter * shopScreen.CoinsForCorrectAnswer;
-        int minusCoins = hintsCounter * shopScreen.PenaltyForUsingHint;
+        int plusCoins = correctAnswersCounter * 150;
+        int minusCoins = hintsCounter * 50;
 
-        shopScreen.AddCoinsForCorrectAnswer(plusCoins);
-        shopScreen.RemoveCoinsForUsingHints(minusCoins);
+        screens.AddCoinsForCorrectAnswer(plusCoins);
+        screens.RemoveCoinsForUsingHints(minusCoins);
     }
 }
