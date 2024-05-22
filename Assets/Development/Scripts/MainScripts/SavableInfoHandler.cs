@@ -13,8 +13,8 @@ public class SavableInfoHandler : MonoBehaviour
     void Awake()
     {
         Debug.Log($"Savable files located in: [{Application.persistentDataPath}]");
-        LoadFromJson();
-        CheckHints();
+        //LoadFromJson();
+        //CheckHints();
     }
 
     public void CheckHints()

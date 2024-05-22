@@ -12,6 +12,7 @@ public class QuizScreenHandler : MonoBehaviour
     public AnswerHandler Answers;
     public ProgressBarHandler ProgressBar;
     public Text currentQuestionText;
+    public Text hintsAmountText;
 
     private GameObject EventSystem;
     private Theme currentQuiz;
@@ -21,6 +22,7 @@ public class QuizScreenHandler : MonoBehaviour
     private int hintsUsed;
 
     private List<int> answers;
+    private List<List<bool>> hints;
 
     public void Update()
     {
@@ -34,11 +36,18 @@ public class QuizScreenHandler : MonoBehaviour
         EventSystem = GameObject.FindWithTag("EventSystem");
         currentQuiz = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId];
         currentQuestion = 0;
-        hintsUsed = 0;
 
         answers = new List<int>();
         for (int i = 0; i < currentQuiz.questions.Count; i++) { answers.Add(0); }
         UpdateCurrentQuestionText();
+
+        hintsUsed = 0;
+        hints = new List<List<bool>>();
+        for (int i = 0; i < currentQuiz.questions.Count; i++)
+        {
+            hints.Add(new List<bool>{false, false, false, false});
+        }
+        UpdateHintsAmount();
 
         Title.text = currentQuiz.themeTitle;
         QuestionTxt.text = currentQuiz.questions[currentQuestion].question;
@@ -46,6 +55,7 @@ public class QuizScreenHandler : MonoBehaviour
         UpdateProgressBar();
     }
 
+    #region UpdateInfo
     public void UpdateCurrentQuestionText()
     {
         currentQuestionText.text = $"{currentQuestion + 1} / {answers.Count}";
@@ -54,9 +64,7 @@ public class QuizScreenHandler : MonoBehaviour
     public void ResetCurrentQuestion()
     {
         currentQuestion = 0;
-        Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
-
-        UpdateCurrentQuestionText();
+        UpdateQuestion();
     }
 
     public void UpdateProgressBar()
@@ -64,6 +72,13 @@ public class QuizScreenHandler : MonoBehaviour
         ProgressBar.SetValue(answers.Count((x) => x > 0));
         ProgressBar.SetMaxValue(currentQuiz.questions.Count);
     }
+
+    public void UpdateHintsAmount()
+    {
+        hintsAmountText.text = EventSystem.GetComponent<SavableInfoHandler>().hints.ToString();
+    }
+    #endregion
+
 
     #region Buttons
     public void NextQuestion()
@@ -98,11 +113,48 @@ public class QuizScreenHandler : MonoBehaviour
         }
     }
 
+    public void UseHint()
+    {
+        if (hints[currentQuestion].Contains(false) && EventSystem.GetComponent<SavableInfoHandler>().hints > 0)
+        {
+            int currentAnswer = currentQuiz.questions[currentQuestion].correctAnswer;
+
+            System.Random rnd = new System.Random();
+            int randomAnswer;
+
+            while(true)
+            {
+                randomAnswer = rnd.Next(0, 4);
+                if (randomAnswer != (currentAnswer - 1) && !hints[currentQuestion][randomAnswer])
+                {
+                    hints[currentQuestion][randomAnswer] = true;
+                    hintsUsed++;
+                    EventSystem.GetComponent<SavableInfoHandler>().hints--;
+                    break;
+                }
+            }
+
+            int answeredWithHintsCounter = 0;
+            foreach (bool answer in hints[currentQuestion])
+            {
+                if(answer) { answeredWithHintsCounter++; }
+            }
+            if (answeredWithHintsCounter == 3)
+            {
+                hints[currentQuestion][currentAnswer - 1] = true;
+            }
+
+            Answers.SetupUsedHints(hints[currentQuestion], currentAnswer);
+            UpdateHintsAmount();
+        }
+    }
+
     private void UpdateQuestion()
     {
         UpdateCurrentQuestionText();
         QuestionTxt.text = currentQuiz.questions[currentQuestion].question;
         Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
+        Answers.SetupUsedHints(hints[currentQuestion], currentQuiz.questions[currentQuestion].correctAnswer);
     }
     #endregion
 }
