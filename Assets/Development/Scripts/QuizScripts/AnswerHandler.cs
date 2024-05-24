@@ -159,17 +159,4 @@ public class AnswerHandler : MonoBehaviour
     {
         return clicked;
     }
-
-    public List<string> GetAnswersText()
-    {
-        List<string> answersText = new List<string>
-        {
-            answer1.text,
-            answer2.text,
-            answer3.text,
-            answer4.text
-        };
-
-        return answersText;
-    }
 }

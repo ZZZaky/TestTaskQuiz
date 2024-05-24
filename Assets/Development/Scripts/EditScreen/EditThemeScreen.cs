@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 public class EditThemeScreen : MonoBehaviour
 {
-    public Text Title;
-    public Text QuestionTxt;
-    public AnswerHandler Answers;
-    public Text currentQuestionText;
+    public InputField Title;
+    public InputField QuestionText;
+    public InputAnswerHandler Answers;
+    public Text QuestionCounterText;
 
     private GameObject EventSystem;
     private Theme currentQuiz;
@@ -21,7 +21,7 @@ public class EditThemeScreen : MonoBehaviour
     public void Update()
     {
         currentQuiz.themeTitle = Title.text;
-        currentQuiz.questions[currentQuestion].question = currentQuestionText.text;
+        currentQuiz.questions[currentQuestion].question = QuestionText.text;
         currentQuiz.questions[currentQuestion].answers = new List<string>(Answers.GetAnswersText());
 
         answers[currentQuestion] = Answers.GetUserAnswer();
@@ -40,14 +40,13 @@ public class EditThemeScreen : MonoBehaviour
         }
 
         Title.text = currentQuiz.themeTitle;
-        QuestionTxt.text = currentQuiz.questions[currentQuestion].question;
-        Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
-        UpdateCurrentQuestionText();
+
+        UpdateQuestion();
     }
 
-    public void UpdateCurrentQuestionText()
+    public void UpdateQuestionCounterText()
     {
-        currentQuestionText.text = $"{currentQuestion + 1} / {answers.Count}";
+        QuestionCounterText.text = $"{currentQuestion + 1} / {answers.Count}";
     }
 
 
@@ -108,12 +107,13 @@ public class EditThemeScreen : MonoBehaviour
         }
 
         EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[currentQuiz.themeId] = currentQuiz;
+        EventSystem.GetComponent<ScreensHandler>().SetActiveScreen("Edit");
     }
 
     private void UpdateQuestion()
     {
-        UpdateCurrentQuestionText();
-        QuestionTxt.text = currentQuiz.questions[currentQuestion].question;
+        UpdateQuestionCounterText();
+        QuestionText.text = currentQuiz.questions[currentQuestion].question;
         Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
     }
     #endregion
