@@ -84,11 +84,11 @@ public class EditThemeScreen : MonoBehaviour
 
     public void AddQuestion()
     {
-        string newQuestion = "Enter question";
+        string newQuestion = "";
         List<string> newAnswers = new List<string>();
         for (int i = 0; i < 4; i++)
         {
-            newAnswers.Add("Enter answer");
+            newAnswers.Add("");
         }
         int newCorrectAnswer = 1;
 
