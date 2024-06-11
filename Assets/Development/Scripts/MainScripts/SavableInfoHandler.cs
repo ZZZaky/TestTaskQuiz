@@ -9,18 +9,23 @@ public class SavableInfoHandler : MonoBehaviour
     public int hints;
     public int lastEnter;
     public Themes allThemes;
+    public LastUnfinishedTheme lastTheme;
+
 
     void Awake()
     {
         Debug.Log($"Savable files located in: [{Application.persistentDataPath}]");
-        //LoadFromJson();
-        //CheckHints();
+        LoadFromJson();
+        CheckHints();
+    }
+
+    void Update()
+    {
+        SaveToJson();
     }
 
     public void CheckHints()
     {
-        Debug.Log($"day rn [{DateTime.Now.Day}], last day [{lastEnter}]");
-
         if (lastEnter != DateTime.Now.Day)
         {
             lastEnter = DateTime.Now.Day;
@@ -31,7 +36,7 @@ public class SavableInfoHandler : MonoBehaviour
 
     public void SaveToJson()
     {
-        SavableData toSave = new SavableData(allThemes, coins, hints, lastEnter);
+        SavableData toSave = new SavableData(allThemes, coins, hints, lastEnter, lastTheme);
 
         string data = JsonUtility.ToJson(toSave, true);
         string filePath = Application.persistentDataPath + "/SaveQuiz.json";
@@ -51,7 +56,9 @@ public class SavableInfoHandler : MonoBehaviour
             coins = toLoad.coins;
             hints = toLoad.hints;
             lastEnter = toLoad.lastEnter;
+            lastTheme = toLoad.lastTheme;
         }
+        Debug.Log($"id: {lastTheme.id}");
     }
 }
 
@@ -64,14 +71,16 @@ public class SavableData
     public int hints;
     public int lastEnter;
     public Themes themes;
+    public LastUnfinishedTheme lastTheme;
 
     public SavableData() {}
-    public SavableData(Themes themes, int coins, int hints, int lastEnter)
+    public SavableData(Themes themes, int coins, int hints, int lastEnter, LastUnfinishedTheme lastTheme)
     {
         this.themes = themes;
         this.coins = coins;
         this.hints = hints;
         this.lastEnter = lastEnter;
+        this.lastTheme = lastTheme;
     }
 }
 
@@ -80,7 +89,6 @@ public class SavableData
 public class Themes
 {
     public List<Theme> themes;
-
 
     public string toString()
     {
@@ -147,3 +155,52 @@ public class Question
     public string toString() => $"Question: {question}; Correct answer: {correctAnswer}";
 }
 #endregion
+
+
+[System.Serializable]
+public class LastUnfinishedTheme
+{
+    public int id;
+    public int question;
+    public List<int> userAnswers;
+    public List<List<int>> usedHints;
+
+    public LastUnfinishedTheme() 
+    {
+        userAnswers = new List<int>();
+        usedHints = new List<List<int>>();
+    }
+
+    public LastUnfinishedTheme(int id, int question, List<int> userAnswers, List<List<int>> usedHints)
+    {
+        this.id = id;
+        this.question = question;
+        this.userAnswers = userAnswers;
+        this.usedHints = usedHints;
+    }
+
+    public LastUnfinishedTheme(int id, int question, List<int> userAnswers, List<List<bool>> usedHints)
+    {
+        this.id = id;
+        this.question = question;
+        this.userAnswers = userAnswers;
+
+        this.usedHints = new List<List<int>>();
+        for (int i = 0; i < usedHints.Count; i++)
+        {
+            this.usedHints.Add(new List<int> { 0, 0, 0, 0 });
+            for (int j = 0; j < usedHints[i].Count; j++)
+            {
+                this.usedHints[i][j] = usedHints[i][j] ? 1 : 0;
+            }
+        }
+    }
+
+    public void Clear()
+    {
+        id = -1;
+        question = -1;
+        userAnswers = null;
+        usedHints = null;
+    }
+}

@@ -24,10 +24,11 @@ public class QuizScreenHandler : MonoBehaviour
     private List<int> answers;
     private List<List<bool>> hints;
 
-    public void Update()
+    void Update()
     {
         answers[currentQuestion] = Answers.GetUserAnswer();
         UpdateProgressBar();
+        SaveQuizProgress();
     }
 
     public void StartQuiz(int quizId)
@@ -50,9 +51,54 @@ public class QuizScreenHandler : MonoBehaviour
         UpdateHintsAmount();
 
         Title.text = currentQuiz.themeTitle;
-        QuestionTxt.text = currentQuiz.questions[currentQuestion].question;
-        Answers.SetupQuestion(currentQuiz.questions[currentQuestion], answers[currentQuestion]);
-        UpdateProgressBar();
+        UpdateQuestion();
+    }
+
+    public void LoadLastQuiz()
+    {
+        if (EventSystem.GetComponent<SavableInfoHandler>().lastTheme.id != -1)
+        {
+            LastUnfinishedTheme lastQuiz = EventSystem.GetComponent<SavableInfoHandler>().lastTheme;
+            quizId = lastQuiz.id;
+            EventSystem = GameObject.FindWithTag("EventSystem");
+            currentQuiz = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId];
+            currentQuestion = lastQuiz.question;
+
+            answers = lastQuiz.userAnswers;
+            UpdateCurrentQuestionText();
+
+            hintsUsed = 0;
+            hints = new List<List<bool>>();
+
+            for (int i = 0; i < currentQuiz.questions.Count; i++)
+            {
+                hints.Add(new List<bool> { false, false, false, false });
+                for (int j = 0; j < 4; j++)
+                {
+                    hints[i][j] = lastQuiz.usedHints[i][j] == 1 ? true : false;
+                }
+            }
+
+            for (int i = 0; i < currentQuiz.questions.Count; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (hints[i][j])
+                    {
+                        hintsUsed++;
+                    }
+                }
+            }
+            UpdateHintsAmount();
+
+            Title.text = currentQuiz.themeTitle;
+            UpdateQuestion();
+        }
+    }
+
+    public void SaveQuizProgress()
+    {
+        EventSystem.GetComponent<SavableInfoHandler>().lastTheme = new LastUnfinishedTheme(quizId, currentQuestion, answers, hints);
     }
 
     #region UpdateInfo
@@ -97,7 +143,6 @@ public class QuizScreenHandler : MonoBehaviour
             QuizSummaryScreenHandler quizSummary = EventSystem.GetComponent<ScreensHandler>().quizSummaryScreen.GetComponent<QuizSummaryScreenHandler>();
             quizSummary.CreateSummary(Title.text, quizId, hintsUsed);
             quizSummary.UpdateSummary(answers, hintsUsed);
-            currentQuestion++;
         }
     }
 

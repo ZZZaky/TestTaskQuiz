@@ -16,6 +16,10 @@ public class ShopScreenHandler : MonoBehaviour
     {
         EventSystem = GameObject.FindWithTag("EventSystem");
         HintPriceText.text = HintPrice.ToString();
+    }
+
+    void Update()
+    {
         UpdateCoins();
     }
 

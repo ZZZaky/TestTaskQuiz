@@ -38,6 +38,7 @@ public class QuizResultScreenHandler : MonoBehaviour
         { Result.Add(userAnswers[i] == correctAnswers[i]); }
 
         AddBonuses(GenerateResult(), hintsUsed);
+        EventSystem.GetComponent<SavableInfoHandler>().lastTheme.Clear();
     }
 
     private int GenerateResult()

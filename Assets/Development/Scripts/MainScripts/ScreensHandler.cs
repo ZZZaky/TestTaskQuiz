@@ -30,6 +30,7 @@ public class ScreensHandler : MonoBehaviour
     public Color activeButtonColor;
     public Color inactiveButtonColor;
 
+    public string CurrentScreen;
 
     void Awake()
     {
@@ -45,6 +46,7 @@ public class ScreensHandler : MonoBehaviour
         homeIcon.color = inactiveButtonColor;
         editIcon.color = inactiveButtonColor;
         shopIcon.color = inactiveButtonColor;
+        CurrentScreen = "";
 
         homeScreen.SetActive(false);
         editScreen.SetActive(false);
@@ -58,6 +60,11 @@ public class ScreensHandler : MonoBehaviour
 
     public void SetActiveScreen(string screen)
     {
+        if ((CurrentScreen == "Quiz" && screen != "QuizSummary") || (CurrentScreen == "QuizSummary" && screen != "QuizResult" && screen != "Quiz"))
+        {
+            quizScreen.GetComponent<QuizScreenHandler>().SaveQuizProgress();
+        }
+
         ResetScreens();
 
         switch (screen)
@@ -65,33 +72,42 @@ public class ScreensHandler : MonoBehaviour
             case "Home":
                 homeIcon.color = activeButtonColor;
                 homeScreen.SetActive(true);
+                CurrentScreen = "Home";
                 break;
             case "Edit":
                 editIcon.color = activeButtonColor;
                 editScreen.SetActive(true);
+                CurrentScreen = "Edit";
                 break;
             case "EditTheme":
                 editThemeScreen.SetActive(true);
+                CurrentScreen = "EditTheme";
                 break;
             case "Shop":
                 shopIcon.color = activeButtonColor;
                 shopScreen.SetActive(true);
+                CurrentScreen = "Shop";
                 break;
             case "Quiz":
                 quizScreen.SetActive(true);
+                CurrentScreen = "Quiz";
                 break;
             case "Library":
                 libraryScreen.SetActive(true);
+                CurrentScreen = "Library";
                 break;
             case "QuizSummary":
                 quizSummaryScreen.SetActive(true);
+                CurrentScreen = "QuizSummary";
                 break;
             case "QuizResult":
                 quizResultScreen.SetActive(true);
+                CurrentScreen = "QuizResult";
                 break;
             default:
                 homeIcon.color = activeButtonColor;
                 homeScreen.SetActive(true);
+                CurrentScreen = "Home";
                 break;
         }
     }
@@ -106,6 +122,13 @@ public class ScreensHandler : MonoBehaviour
     {
         SetActiveScreen("EditTheme");
         editThemeScreen.GetComponent<EditThemeScreen>().StartEditing(quizId);
+    }
+
+    public void ContinueQuiz()
+    {
+        SetActiveScreen("Quiz");
+        quizScreen.GetComponent<QuizScreenHandler>().StartQuiz(0);
+        quizScreen.GetComponent<QuizScreenHandler>().LoadLastQuiz();
     }
 
     public void AddCoinsForCorrectAnswer(int amount)
