@@ -163,12 +163,20 @@ public class LastUnfinishedTheme
     public int id;
     public int question;
     public List<int> userAnswers;
-    public List<List<int>> usedHints;
+    public List<int> usedHints;
 
     public LastUnfinishedTheme() 
     {
         userAnswers = new List<int>();
-        usedHints = new List<List<int>>();
+        usedHints = new List<int>();
+    }
+
+    public LastUnfinishedTheme(int id, int question, List<int> userAnswers, List<int> usedHints)
+    {
+        this.id = id;
+        this.question = question;
+        this.userAnswers = userAnswers;
+        this.usedHints = usedHints;
     }
 
     public LastUnfinishedTheme(int id, int question, List<int> userAnswers, List<List<int>> usedHints)
@@ -176,7 +184,14 @@ public class LastUnfinishedTheme
         this.id = id;
         this.question = question;
         this.userAnswers = userAnswers;
-        this.usedHints = usedHints;
+        this.usedHints = new List<int>();
+        for (int i = 0; i < usedHints.Count; i++)
+        {
+            for (int j = 0; j < usedHints[i].Count; j++)
+            {
+                this.usedHints.Add(usedHints[i][j]);
+            }
+        }
     }
 
     public LastUnfinishedTheme(int id, int question, List<int> userAnswers, List<List<bool>> usedHints)
@@ -185,13 +200,12 @@ public class LastUnfinishedTheme
         this.question = question;
         this.userAnswers = userAnswers;
 
-        this.usedHints = new List<List<int>>();
+        this.usedHints = new List<int>();
         for (int i = 0; i < usedHints.Count; i++)
         {
-            this.usedHints.Add(new List<int> { 0, 0, 0, 0 });
             for (int j = 0; j < usedHints[i].Count; j++)
             {
-                this.usedHints[i][j] = usedHints[i][j] ? 1 : 0;
+                this.usedHints.Add(usedHints[i][j] ? 1 : 0);
             }
         }
     }

@@ -31,6 +31,7 @@ public class QuizScreenHandler : MonoBehaviour
         SaveQuizProgress();
     }
 
+    #region Starting quiz
     public void StartQuiz(int quizId)
     {
         this.quizId = quizId;
@@ -56,11 +57,11 @@ public class QuizScreenHandler : MonoBehaviour
 
     public void LoadLastQuiz()
     {
+        EventSystem = GameObject.FindWithTag("EventSystem");
         if (EventSystem.GetComponent<SavableInfoHandler>().lastTheme.id != -1)
         {
             LastUnfinishedTheme lastQuiz = EventSystem.GetComponent<SavableInfoHandler>().lastTheme;
             quizId = lastQuiz.id;
-            EventSystem = GameObject.FindWithTag("EventSystem");
             currentQuiz = EventSystem.GetComponent<SavableInfoHandler>().allThemes.themes[quizId];
             currentQuestion = lastQuiz.question;
 
@@ -75,7 +76,8 @@ public class QuizScreenHandler : MonoBehaviour
                 hints.Add(new List<bool> { false, false, false, false });
                 for (int j = 0; j < 4; j++)
                 {
-                    hints[i][j] = lastQuiz.usedHints[i][j] == 1 ? true : false;
+                    hints[i][j] = lastQuiz.usedHints[i * 4 + j] == 1 ? true : false;
+                    Debug.Log($"[{i * 4 + j}] :: {hints[i][j]}");
                 }
             }
 
@@ -95,6 +97,7 @@ public class QuizScreenHandler : MonoBehaviour
             UpdateQuestion();
         }
     }
+    #endregion Starting quiz
 
     public void SaveQuizProgress()
     {

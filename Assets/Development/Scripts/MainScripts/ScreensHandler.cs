@@ -127,7 +127,7 @@ public class ScreensHandler : MonoBehaviour
     public void ContinueQuiz()
     {
         SetActiveScreen("Quiz");
-        quizScreen.GetComponent<QuizScreenHandler>().StartQuiz(0);
+        //quizScreen.GetComponent<QuizScreenHandler>().StartQuiz(0);
         quizScreen.GetComponent<QuizScreenHandler>().LoadLastQuiz();
     }
 
