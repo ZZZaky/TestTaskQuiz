@@ -29,7 +29,6 @@ public class SavableInfoHandler : MonoBehaviour
         if (lastEnter != DateTime.Now.Day)
         {
             lastEnter = DateTime.Now.Day;
-
             hints += 4;
         }
     }
@@ -58,7 +57,6 @@ public class SavableInfoHandler : MonoBehaviour
             lastEnter = toLoad.lastEnter;
             lastTheme = toLoad.lastTheme;
         }
-        Debug.Log($"id: {lastTheme.id}");
     }
 }
 
