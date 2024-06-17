@@ -74,3 +74,4 @@ crashlytics-build.properties
 # Game на android и windows не игнорируем
 !/GameForAndroid/
 !/GameForWindows/
+!quiz.apk
